@@ -1,19 +1,41 @@
+**Schemas And Relations**
 
+*Dropping Database*
+use databaseName
+db.dropDatabase()
 
-Numbers:
+*Dropping a Collection*
+db.collection-name.drop()
+
+- We need to find the relationship between the entities in our database. This part includes:
+    - Document schemas and data types
+    - Modeling Relations between documents
+    - Validating a schema upon storage
+
+*Why do we need Schema*
+- Storage doesn't enforce a schema but practically we need a schema to work with. 
+    - Some documents may contain extra information, or all of the documents have the same schema.
+
+## Datatypes
+**Text**
+    - In quotation
+    - max document size is 16 MB
+**Boolean**
+    - T/F
+**Numbers:**
     int32
     int64
     double
     NumberDecimal: high precision, 34 decimal places
-ObjectId
+**ObjectId**
     is unique id string, it is based on a timestamp
-ISODate
+**ISODate**
     is a date datatype
-Timestamp
+**Timestamp**
     is automatically created and mostly used internally
-Embeded Documents
+**Embeded Documents**
     documents inside documents
-Array
+**Array**
     array of anything: Documents, arrays, ...
 
 ## Playing with the databases
@@ -62,5 +84,30 @@ Array
     // simply adding a number adds a double
     NumberDecimal(12.345) // very high precision
 ```
+- http://mongodb.github.io/node-mongodb-native/3.1/api/Long.html
 
 ## Data Schemas and Data Modelling
+- check out lecture 39
+
+## HOW TO STORE RELATED DATA   
+- Embedded document or References
+```js
+    //references
+    {
+        user: "max",
+        ownedBooks: [{Book1-id},{Book2-id}]
+    }
+```
+## When to use embedded documents
+Data model: 
+    - Patients and Patient-Summary
+    - This is a one to one data model so we can use embedded document mode
+    - Patient(name, age, healthSummary)
+    - Summary(diseases: [... list of all diseasases])
+    - Patient collection and Summary collection is not necessary to be split. But if our interest is to analyze patients separately and we want to analyze diseases summaries separately we should separate it.
+    *One To Many*
+    - Question Thread and Answers
+        One question but multiple answers, so how to model the database 
+        - Embeded or
+        - Separate Question and Answers?
+        - The best approach is an embedded document.
