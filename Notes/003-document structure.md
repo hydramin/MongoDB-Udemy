@@ -194,3 +194,95 @@ Example Project: A Blog
         Fetch all Posts
         Fetch a Post and
         Comment on a Post
+    - Schema 1
+        user(*uid*, name, [pids])
+        post(*pid*, content, uid, [cid])
+        comment(*cid*, content, pid, by-uid)
+
+```js
+db.user.insertMany([
+    {
+        name: "Amin",
+        posts: [
+
+        ]
+    },
+    {
+        name: "Afia",
+        posts: [
+
+        ]
+    },
+    {
+        name: "Nadia",
+        posts: [
+
+        ]
+    }
+])
+
+db.post.insertMany([
+    {
+        content: "this is the posted content",
+        uid: "",
+        comments: [
+
+        ]
+    },
+    {
+        content: "this is the second content",
+        uid: "",
+        comments: [
+
+        ]
+    }
+])
+// comment(*cid*, content, pid, by-uid)
+
+db.comment.insertMany([
+    {
+        content: "this is comment 1",
+        pid: "",
+        postedBy: "" //uid
+    }
+])
+```
+- Schema 2
+        user(*uid*, name)
+        post(*pid*, content, uid)
+        comment(*cid*, content, in-pid, by-uid)
+
+
+```js
+db.user.insertMany([
+    {
+        name: "Amin"        
+    },
+    {
+        name: "Afia"
+    },
+    {
+        name: "Nadia"
+    }
+])
+
+db.post.insertMany([
+    {
+        content: "this is the posted content",
+        uid: "",        
+    },
+    {
+        content: "this is the second content",
+        uid: ""
+    }
+])
+// comment(*cid*, content, pid, by-uid)
+
+db.comment.insertMany([
+    {
+        content: "this is comment 1",
+        pid: "",
+        postedBy: "" //uid
+    }
+])
+```
