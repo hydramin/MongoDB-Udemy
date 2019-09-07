@@ -111,3 +111,86 @@ Data model:
         - Embeded or
         - Separate Question and Answers?
         - The best approach is an embedded document.
+    - Database of Cities and Residents
+        - one person can ony reside in one city. One city many residents
+        - City ---> Resident , one to many
+        - Embedded document
+    - Customer vs Product many to many relationship. It is Reference style data
+        - Customer( array of product ids)
+        - Product( array of customers ids )
+
+        - If the duplicated data has to be updated at all places, then reference is the best. If Duplication is needed in the app embedded is not bad.
+    - Book vs Author relationship
+        - Many to many, When an authors info changes it should change every where. So Embedded is not good. Reference is better.
+    - City vs Residents data cant be embedded because the 16MB limit will be reached quite easily
+
+    - Aggregation in mongo using the $lookUp() aggreregation function. 
+```js
+    //lookup is used to lookup the reference data in a Reference based schema design
+    // example schema
+    //Customers vs favBooks relation
+    db.customer.insertMany(
+        [{
+            name: "Amin",
+            favBooks: [
+                'id1',
+                'id2'
+            ]
+        },
+        {
+            name: "Nadia",
+            favBooks: [
+                'id2'
+            ]
+        }]
+    )
+    
+    //Books schema
+
+    db.book.insertMany( 
+        [{
+            _id: "id1",
+            title: "Harry Potter",
+            author: "J.K Rowling"
+        },
+        {
+            _id: "id2",
+            title: "The Davinci Code",
+            author: "Dan Brown"
+        }]
+    )
+
+    // To find the details of ids for Nadia, we can use aggregation function lookup
+    db.customer.aggregate([
+        $lookup : {
+            from: "book", // the destination collection
+            localField: "favBooks", // local field of reference (foreign key)
+            foreignField: "_id",// which field of the ref is used as a reference
+            as: "favBookData" // the output field containing the aggregated data
+        }
+    ])
+
+    //the look up aggregation would be like this
+    db.customer.aggregate(
+        [
+            {
+                $lookup : {
+                    from:"book",
+                    foreignField:"_id",
+                    localField:"favBooks",
+                    as: "aggregated"
+                }
+            }
+        ]
+    )
+```
+
+Example Project: A Blog
+    - There are **Users** users can **Post** a blog and they can write **Comment** on *Posts*
+    - The application should allow users to 
+        Create a post
+        Edit a post
+        Delete a post
+        Fetch all Posts
+        Fetch a Post and
+        Comment on a Post
