@@ -266,23 +266,97 @@ db.user.insertMany([
     }
 ])
 
+/*
+ObjectId("5d733684e38eff2c7e8dbbae"),
+ObjectId("5d733684e38eff2c7e8dbbaf"),
+ObjectId("5d733684e38eff2c7e8dbbb0")
+*/
 db.post.insertMany([
     {
-        content: "this is the posted content",
-        uid: "",        
+        content: "this is the posted content 1",
+        uid: ObjectId("5d733684e38eff2c7e8dbbae")        
     },
     {
-        content: "this is the second content",
-        uid: ""
+        content: "this is the second content 2",
+        uid: ObjectId("5d733684e38eff2c7e8dbbaf")
+    },
+    {
+        content: "this is the posted content 3",
+        uid: ObjectId("5d733684e38eff2c7e8dbbae")        
+    },
+    {
+        content: "this is the second content 4",
+        uid: ObjectId("5d733684e38eff2c7e8dbbb0")
     }
 ])
 // comment(*cid*, content, pid, by-uid)
+/*
+ObjectId("5d733759e38eff2c7e8dbbb1"),
+ObjectId("5d733759e38eff2c7e8dbbb2"),
+ObjectId("5d733759e38eff2c7e8dbbb3"),
+ObjectId("5d733759e38eff2c7e8dbbb4")
+*/
 
+/*
+ObjectId("5d733684e38eff2c7e8dbbae"),
+ObjectId("5d733684e38eff2c7e8dbbaf"),
+ObjectId("5d733684e38eff2c7e8dbbb0")
+*/
 db.comment.insertMany([
     {
         content: "this is comment 1",
-        pid: "",
-        postedBy: "" //uid
-    }
+        pid: ObjectId("5d733759e38eff2c7e8dbbb1"),
+        postedBy: ObjectId("5d733684e38eff2c7e8dbbae")
+    },
+    {
+        content: "this is comment 2",
+        pid: ObjectId("5d733759e38eff2c7e8dbbb2"),
+        postedBy: ObjectId("5d733684e38eff2c7e8dbbaf")
+    },
+    {
+        content: "this is comment 3",
+        pid: ObjectId("5d733759e38eff2c7e8dbbb2"),
+        postedBy: ObjectId("5d733684e38eff2c7e8dbbae")
+    },
+    {
+        content: "this is comment 4",
+        pid: ObjectId("5d733759e38eff2c7e8dbbb1"),
+        postedBy: ObjectId("5d733684e38eff2c7e8dbbae")
+    },
+    {
+        content: "this is comment 5",
+        pid: ObjectId("5d733759e38eff2c7e8dbbb4"),
+        postedBy: ObjectId("5d733684e38eff2c7e8dbbaf")
+    },
+    {
+        content: "this is comment 6",
+        pid: ObjectId("5d733759e38eff2c7e8dbbb3"),
+        postedBy: ObjectId("5d733684e38eff2c7e8dbbb0")
+    },
+    {
+        content: "this is comment 7",
+        pid: ObjectId("5d733759e38eff2c7e8dbbb4"),
+        postedBy: ObjectId("5d733684e38eff2c7e8dbbb0")
+    },
+    {
+        content: "this is comment 8",
+        pid: ObjectId("5d733759e38eff2c7e8dbbb3"),
+        postedBy: ObjectId("5d733684e38eff2c7e8dbbaf") 
+    },
 ])
+```
+query on the blog database
+1. Find all posts made by Amin
+```js
+    db.user.findOne(
+        {
+            name: "Amin"
+        }
+    )._id
+
+    db.post.find(
+        {
+            uid: ObjectId("5d733684e38eff2c7e8dbbae")
+        }
+    ).pretty()
 ```
