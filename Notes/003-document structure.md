@@ -360,3 +360,78 @@ query on the blog database
         }
     ).pretty()
 ```
+Schema validation
+- use a schema to use as a validation criteria and accept or reject a Document.
+- Strict: all inserts and updates
+- moderate: all inserts are checked and updates are checked if the previous entry is correct
+- if it fails: pass error message and reject or send a warning message.
+- Collections can be created "Lazily" just as we did above or we can use the formal createion method
+```js
+db.createCollection(
+    "name-of-collection",
+    validator: { // specify the type of validator
+        $jsonSchema: { // name the type of schema
+            bsonType: //could be {string, objcetId, number, objet}
+            required: //list array of required fields
+            properties: { // describe the properties or rows or document rows
+                ...
+            }
+        }
+    }
+)
+// the post collection can be recreated like this
+db.createCollection(
+    "post",
+    {
+        validator: {
+            $jsonSchema: {
+                bsonType: 'object',
+                required: ["title", "text", "creator", "comments"],
+                properties: {
+                    title:{ 
+                        bsonType: "string",
+                        description: "is a required string"
+                    },
+                    text: {
+                        bsonType: "string",
+                        description: "required string"
+                    },
+                    creator: {
+                        bsonType: "objectId",
+                        description: "array or ids"
+                    }, 
+                    comments: {
+                        bsonttype: "array",
+                        description: "required array",
+                        items: {
+                            bsonType: "object",
+                            required: ["content", "author"]
+                            properties: {
+                                content: {
+                                    bsonType: "object",
+                                    description: "required string of blog content" 
+                                },
+                                author: {
+                                    bsonType: "objectId":
+                                    description: "required string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    )
+```
+- passing in an erroneous data throws an error.
+- To change the validation action from the default strict mode to a warnning mode we do this:
+- to change the validator without recreating the collection we use .runCommand
+```js
+// db.runCommand runs an administrative command
+db.runCommand(
+    collMod: "name of collection",
+    validator: {... just like the above},
+    validationAction: "warn" // or "error"
+)
+```
